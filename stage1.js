@@ -2,8 +2,15 @@ const readline = require('readline');
 const customers = require('./customers.json');
 const products = require('./products.json');
 const orders = require('./orders.json');
+function getOrderById(orderId) {
+   return orders.find(o => o.id === orderId);
+}
 
-const calculateSubtotal=(order,products)=>{
+function getOrdersByCustomer(customerId) {
+   return orders.filter(o => o.customerId === customerId);
+}
+
+const calculateSubtotal=(order)=>{
     let subtotal =0;
      for(let item of order.items){
     const product = products.find(p=>p.id==item.productId);
@@ -67,3 +74,12 @@ rl.question("Which order index do you want? ", (answer) => {
 
   rl.close(); 
 });
+module.exports = {
+     calculateSubtotal,
+     calculateDiscount,
+     calculateTax,
+     calculateTotal,
+     OrderSummary,
+     getOrderById,
+     getOrdersByCustomer
+   };

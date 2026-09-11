@@ -1,4 +1,4 @@
-const { calculateTotal, getOrderSummary, isOrderValid } = require('./stage1.js');
+const { calculateTotal } = require('./stage1.js');
 function calculateTotalRevenue(orders) {
   let totalRevenue = 0;
   orders.forEach((order) => {
@@ -20,15 +20,10 @@ function calculateAverageOrderValue(orders) {
   return AverageOrderValue;
 }
 
-export const getHighestValueOrder = (orders, products) => {
+const getHighestValueOrder = (orders, products) => {
   let allTotals = getAllOrderTotals(orders);
   let highestValue = Math.max(...allTotals);
-  
-  let highestOrder = orders.find(order => {
-    const { total } = getOrderSummary(order.id, orders, products);
-    return total === highestValue;
-  });
-  
+  let highestOrder = orders.find(order => calculateTotal(order) === highestValue);
   return highestOrder;
 }
 
@@ -63,3 +58,18 @@ function areAllOrdersValid(orders, customers, products) {
   });
   return allValid;
 }
+
+function updateOrder(order, updates) {
+  return { ...order, ...updates };
+}
+
+module.exports = {
+calculateTotalRevenue,
+getAllOrderTotals,
+calculateAverageOrderValue,
+getHighestValueOrder,
+hasHighValueOrder,
+isOrderValid,
+areAllOrdersValid,
+updateOrder
+};
