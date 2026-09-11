@@ -1,7 +1,7 @@
 const fs = require('fs');
-const customers = JSON.parse(fs.readFileSync('./customers.json', 'utf8'));
-const products = JSON.parse(fs.readFileSync('./products.json', 'utf8'));
-const orders = JSON.parse(fs.readFileSync('./orders.json', 'utf8'));
+const customers = JSON.parse(fs.readFileSync('./data/customers.json', 'utf8'));
+const products = JSON.parse(fs.readFileSync('./data/products.json', 'utf8'));
+const orders = JSON.parse(fs.readFileSync('./data/orders.json', 'utf8'));
 
 const { getOrderById, calculateTotal } = require('./stage1.js');
 function getCustomerCB(customerId, callback) {  
@@ -188,3 +188,8 @@ function processOrderWithPromises(orderId) {
       console.log("Order processing failed:", error.message);
     });
 }
+
+module.exports = { processOrderWithCallbacks, processOrderWithPromises };
+
+processOrderWithCallbacks(orders[0].id);
+processOrderWithPromises(orders[0].id);

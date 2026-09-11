@@ -1,8 +1,8 @@
 const fs = require('fs');
+const customers = JSON.parse(fs.readFileSync('./data/customers.json', 'utf8'));
+const products = JSON.parse(fs.readFileSync('./data/products.json', 'utf8'));
+const orders = JSON.parse(fs.readFileSync('./data/orders.json', 'utf8'));
 const { getOrderById, calculateTotal } = require('./stage1.js');
-const customers = JSON.parse(fs.readFileSync('./customers.json', 'utf8'));
-const products = JSON.parse(fs.readFileSync('./products.json', 'utf8'));
-const orders = JSON.parse(fs.readFileSync('./orders.json', 'utf8'));
 
 class OrderNotFoundError extends Error {
   constructor(message) {
@@ -107,7 +107,7 @@ function createOrderAsync(customer, orderProducts) {
 
 async function processOrder(orderId) {
   try {
-    console.log(`\n--- Starting processing for Order ID: ${orderId} ---`);
+    console.log(`\n Starting processing for Order ID: ${orderId} `);
 
     const order = getOrderById(orderId);
     if (!order) {
@@ -129,12 +129,14 @@ async function processOrder(orderId) {
   } catch (error) {
     console.error(`[Failure Handled] (${error.name}): ${error.message}`);
   } finally {
-    console.log(`--- Finished processing attempt for: ${orderId} ---\n`);
+    console.log(`Finished processing attempt for: ${orderId} \n`);
   }
 }
 
 
-processOrder(orders[0]?.id || "ord_1");
+if (require.main === module) {
+  processOrder(orders[0]?.id || "ord_1");
+}
 
 module.exports = {
   processOrder,
@@ -144,3 +146,5 @@ module.exports = {
   OrderNotFoundError,
   PaymentFailedError
 };
+
+processOrder(orders[0].id);

@@ -1,7 +1,6 @@
-const readline = require('readline');
-const customers = require('./customers.json');
-const products = require('./products.json');
-const orders = require('./orders.json');
+const products = require('./data/products.json');
+const customers = require('./data/customers.json');
+const orders = require('./data/orders.json');
 function getOrderById(orderId) {
    return orders.find(o => o.id === orderId);
 }
@@ -61,9 +60,8 @@ function OrderSummary(order) {
   console.log(`The Total is ${total}`);
 }
 
-const rl = readline.createInterface({input: process.stdin,output: process.stdout});
-rl.question("Which order index do you want? ", (answer) => {
-  const index = parseInt(answer); 
+if (require.main === module) {
+  const index = 0;
   const order = orders[index];
 
   if (!order) {
@@ -71,9 +69,7 @@ rl.question("Which order index do you want? ", (answer) => {
   } else {
     OrderSummary(order);
   }
-
-  rl.close(); 
-});
+}
 module.exports = {
      calculateSubtotal,
      calculateDiscount,
@@ -83,3 +79,8 @@ module.exports = {
      getOrderById,
      getOrdersByCustomer
    };
+   
+const firstOrder = orders[0];
+console.log("Order Lookup (ID):", getOrderById(firstOrder.id));
+console.log("Orders by Customer:", getOrdersByCustomer(firstOrder.customerId));
+OrderSummary(firstOrder);
