@@ -1,9 +1,16 @@
 const express = require('express');
 const router = express.Router();
-const {login, register} = require('../controllers/logic');
+const { register, login, generateNewAccessToken } = require('../controllers/logic');
+const verifyToken = require('../middleware/auth'); 
+router.post('/checkauth/register', register);
+router.post('/checkauth/login', login);
+router.post('/refresh', generateNewAccessToken);
 
-router.route('/checkauth/login')
-.post(login);
-router.route('/checkauth/register')
-.post(register)
-module.exports =router;
+router.get('/dashboard', verifyToken, (req, res) => {
+    res.status(200).json({ 
+        message: "Welcome to the secure dashboard!",
+        yourUserId: req.user.userId 
+    });
+});
+
+module.exports = router;
